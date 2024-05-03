@@ -6,7 +6,7 @@ export function restrictedWords(words: string[]) {
             .map(w => control.value.includes(w) ? w : null)
             .filter(w => w !== null);
         return invalidWords.length > 0
-            ? { restrictedWords: invalidWords.join(',')}
+            ? { restrictedWords: invalidWords.join(', ')}
             : null;
     }
 }

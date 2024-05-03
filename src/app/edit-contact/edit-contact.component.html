@@ -10,7 +10,8 @@
         <em *ngIf="firstName.errors?.['required'] && firstName.touched">Please enter a First Name</em>
         <em *ngIf="firstName.errors?.['minlength'] && firstName.touched">First Name must be at least 3 characters</em> 
         <input formControlName="lastName" placeholder="Last Name" />
-        <input formControlName="dateOfBirth" type="date" [value]="contactForm.controls.dateOfBirth.value | date: 'yyyy-MM-dd'" placeholder="Date of Birth" />
+        <input formControlName="dateOfBirth" type="date" placeholder="Date of Birth" />
+        <!-- [value]="contactForm.controls.dateOfBirth.value | date: 'yyyy-MM-dd'" -->
         <div>
           <span>Favorites Ranking: </span>
           <input formControlName="favoritesRanking" type="range" min="0" max="5" placeholder="Favorites Ranking" />
@@ -57,9 +58,10 @@
       <nav>Notes</nav>
       <div>
         <textarea placeholder="Notes" rows="5" [class.error]="notes.invalid" formControlName="notes"></textarea>
-        <em *ngIf="notes.errors?.['restictedWords']">
-          Restricted Words Found: {{notes.errors?.['restrictedWords']}}
+        <em *ngIf="notes.errors?.['restrictedWords']">
+          Restricted Words Found: {{ notes.errors?.['restrictedWords'] }}
         </em>
+        <!-- {{notes.errors?.['restrictedWords']}} -->
       </div>
     </section>
     <div class="buttons">
