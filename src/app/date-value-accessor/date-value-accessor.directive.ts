@@ -15,24 +15,18 @@ const DATE_VALUE_PROVIDER: Provider = {
 export class DateValueAccessorDirective implements ControlValueAccessor {
 
     constructor(private element: ElementRef) {}
-    registerOnTouched(fn: any): void {
-        throw new Error("Method not implemented.");
-    }
-    setDisabledState?(isDisabled: boolean): void {
-        throw new Error("Method not implemented.");
-    }
 
     @HostListener('input', ['$event.target.valueAsDate'])
     private onChange!: Function;
-
-    @HostListener('blur')
-    private OnTouched!: Function;
 
     registerOnChange(fn: Function) {
         this.onChange = (valueAsDate: Date) => { fn(valueAsDate); };
     }
 
-    registerOnTouch(fn: Function) {
+    @HostListener('blur')
+    private OnTouched!: Function;
+
+    registerOnTouched(fn: Function) {
         this.OnTouched = fn;
     }
 

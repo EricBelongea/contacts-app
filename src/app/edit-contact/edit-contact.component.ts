@@ -33,6 +33,7 @@ export class EditContactComponent implements OnInit {
     }),
     notes: ['', restrictedWords(['foo', 'bar'])],
 });
+
 // This was the original, but was simplified with the above code. 
 // contactForm = new FormGroup({
 //   id: new FormControl(),
