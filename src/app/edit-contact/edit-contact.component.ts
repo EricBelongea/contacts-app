@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 import { phoneTypeValues, addressTypeValues } from '../contacts/contact.model';
+import { restrictedWords } from '../validators/restricted-words-validator';
 
 @Component({
   templateUrl: './edit-contact.component.html',
@@ -11,10 +12,11 @@ import { phoneTypeValues, addressTypeValues } from '../contacts/contact.model';
 export class EditContactComponent implements OnInit {
   phoneTypes = phoneTypeValues;
   addressTypes = addressTypeValues;
+  
   contactForm = this.fb.nonNullable.group({
     id:'',
     personal: false,
-    firstName:'',
+    firstName:['', [Validators.required, Validators.minLength(3)]],
     lastName:'',
     dateOfBirth: <Date | null>null,
     favoritesRanking: <number | null>null,
@@ -23,31 +25,32 @@ export class EditContactComponent implements OnInit {
       phoneType:'',
     }),
     address:this.fb.nonNullable.group({
-      streetAddress:'',
-      city:'',
-      state:'',
-      postalCode:'',
-      addressType:'',
-  })
-  // This was the original, but was simplified with the above code. 
-  // contactForm = new FormGroup({
-  //   id: new FormControl(),
-  //   firstName: new FormControl(),
-  //   lastName: new FormControl(),
-  //   dateOfBirth: new FormControl(),
-  //   favoritesRanking: new FormControl(),
-  //   phone: new FormGroup({
-  //     phoneNumber: new FormControl(),
-  //     phoneType: new FormControl(),
-  //   }),
-  //   address: new FormGroup({
-  //     streetAddress: new FormControl(),
-  //     city: new FormControl(),
-  //     state: new FormControl(),
-  //     postalCode: new FormControl(),
-  //     addressType: new FormControl(),
-  //   })
-  });
+      streetAddress:['', Validators.required],
+      city:['', Validators.required],
+      state:['', Validators.required],
+      postalCode:['', Validators.required],
+      addressType:['', Validators.required],
+    }),
+    notes: ['', restrictedWords(['foo', 'bar'])],
+});
+// This was the original, but was simplified with the above code. 
+// contactForm = new FormGroup({
+//   id: new FormControl(),
+//   firstName: new FormControl('', Validators.required),
+//   lastName: new FormControl(),
+//   dateOfBirth: new FormControl(),
+//   favoritesRanking: new FormControl(),
+//   phone: new FormGroup({
+//     phoneNumber: new FormControl(),
+//     phoneType: new FormControl(),
+//   }),
+//   address: new FormGroup({
+//     streetAddress: new FormControl(),
+//     city: new FormControl(),
+//     state: new FormControl(),
+//     postalCode: new FormControl(),
+//     addressType: new FormControl(),
+//   })
 
   constructor(private route: ActivatedRoute,
      private contactsService: ContactsService,
@@ -81,6 +84,14 @@ export class EditContactComponent implements OnInit {
         // this.contactForm.controls.address.controls.postalCode.setValue(contact.address.postalCode);
         // this.contactForm.controls.address.controls.addressType.setValue(contact.address.addressType);
     });
+  }
+
+  get firstName() {
+    return this.contactForm.controls.firstName; // This allows us to access firstName in our html w/o having to type 'contactFrom.controls.firstName'. this is called a 'getter'
+  }
+
+  get notes() {
+    return this.contactForm.controls.notes; 
   }
 
   saveContact() {
