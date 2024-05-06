@@ -21,11 +21,8 @@ export class EditContactComponent implements OnInit {
     lastName:'',
     dateOfBirth: <Date | null>null,
     favoritesRanking: <number | null>null,
-    phone:this.fb.nonNullable.group({
-      phoneNumber:'',
-      phoneType:'',
-    }),
-    address:this.fb.nonNullable.group({
+    phones: this.fb.array([this.createPhoneGroup()]),
+    address: this.fb.nonNullable.group({
       streetAddress:['', Validators.required],
       city:['', Validators.required],
       state:['', Validators.required],
@@ -70,7 +67,9 @@ export class EditContactComponent implements OnInit {
 
         // const names = { firstName: contact.firstName, lastName: contact.lastName };
         // this.contactForm.patchValue(names);
-
+      for(let i = 1; i < contact.phones.length; i ++) {
+        this.contactForm.controls.phones.push(this.createPhoneGroup())
+      }
         this.contactForm.setValue(contact); // This one line replaces all of the code below.
 
         // this.contactForm.controls.id.setValue(contact.id);
@@ -86,6 +85,17 @@ export class EditContactComponent implements OnInit {
         // this.contactForm.controls.address.controls.postalCode.setValue(contact.address.postalCode);
         // this.contactForm.controls.address.controls.addressType.setValue(contact.address.addressType);
     });
+  }
+
+  createPhoneGroup() {
+    return this.fb.nonNullable.group({
+      phoneNumber:'',
+      phoneType:'',
+    })
+  }
+
+  addPhone() {
+    this.contactForm.controls.phones.push(this.createPhoneGroup());
   }
 
   get firstName() {
